@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teller — Coming Soon</title>
+  <meta name="robots" content="noindex">
+  <style>html,body{margin:0;height:100%;background:#fffaf3;font-family:system-ui,sans-serif;color:#003637}
+  body{display:grid;place-items:center;text-align:center}a{color:inherit}</style>
+</head>
+<body>
+  <!-- Any address that doesn't exist (a mistyped link, an old QR path…) lands on the home page. -->
+  <p><a id="home" href="/">Teller — back to the home page</a></p>
+  <script>
+    // works on the github.io address (/teller-site/) and on the real domain (/)
+    var base = location.pathname.indexOf("/teller-site/") === 0 ? "/teller-site/" : "/";
+    document.getElementById("home").href = base;
+    location.replace(base);
+  </script>
+</body>
+</html>
