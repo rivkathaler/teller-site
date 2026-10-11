@@ -44,3 +44,5 @@ window.TELLER_PROJECTS = [
     "label": "Web design"
   }
 ];
+// start downloading the first cards right away (the rest follow in js/cards.js)
+window.TELLER_PROJECTS.slice(0, 3).forEach(function (p) { if (p.src) { (new Image()).src = p.src; } });
