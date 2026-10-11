@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teller — Coming Soon</title>
+  <meta name="description" content="Teller — branding and web design. Bold stories. Globally connected. The new website is coming soon.">
+  <meta name="theme-color" content="#fffaf3">
+  <link rel="icon" href="assets/svg/logo.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/Polin-Regular.otf" as="font" type="font/otf" crossorigin>
+  <script>
+    /* js flag + layout: phones (portrait, taller than 7:10) get the iPhone artboard (class "m").
+       Test on a computer with  ?layout=m  (phone)  or  ?layout=d  (desktop). */
+    (function () {
+      var d = document.documentElement, force = /[?&]layout=(m|d)/.exec(location.search);
+      var q = window.matchMedia("(max-aspect-ratio: 7/10)");
+      d.classList.add("js");
+      if (force ? force[1] === "m" : q.matches) d.classList.add("m");
+      if (!force && q.addEventListener) q.addEventListener("change", function () { location.reload(); });
+    })();
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="stage" aria-label="Teller — coming soon">
+    <canvas class="trail" id="trail" aria-hidden="true"></canvas>
+    <!-- Everything inside .frame is laid out in Figma pixels (1440 × 1024 artboard), scaled with the viewport. -->
+    <div class="frame" id="frame">
+
+      <!-- A · outlined circle -->
+      <div class="chip chip--ring" id="chipA">
+        <span class="ring"></span>
+        <img class="arrow" id="arrowA" src="assets/svg/arrow.svg" alt="">
+        <img class="arrow arrow--lime" id="arrowALime" src="assets/svg/arrow-lime.svg" alt="">
+      </div>
+
+      <!-- B · lime pill → circle -->
+      <div class="chip chip--lime" id="chipB">
+        <span class="label" id="labelB">BRANDING</span>
+        <img class="arrow" id="arrowB" src="assets/svg/arrow.svg" alt="">
+      </div>
+
+      <!-- C · white pill → circle → outlined circle -->
+      <div class="chip chip--white" id="chipC">
+        <span class="ring"></span>
+        <span class="label" id="labelC">WEB DESIGN</span>
+        <img class="arrow" id="arrowC" src="assets/svg/arrow.svg" alt="">
+      </div>
+
+      <!-- D · the Teller loop -->
+      <img class="logo" id="logo" src="assets/svg/logo.svg" alt="Teller">
+
+      <!-- Final lockup -->
+      <img class="grid" id="grid" src="assets/svg/grid.svg" alt="">
+      <img class="wordmark" id="wordmark" src="assets/svg/wordmark.svg" alt="Teller">
+      <img class="wordmark wordmark--dark" id="wordmarkDark" src="assets/svg/wordmark-dark.svg" alt="">
+      <img class="tagline" id="tagline" src="assets/svg/tagline.svg" alt="Bold stories. Globally connected.">
+
+      <!-- ============ Part 2 · Coming soon ============ -->
+      <h1 class="headline" id="headline" data-text="COMING  SOON" aria-label="Coming soon"></h1>
+
+      <!-- project cards (filled from js/projects.js) -->
+      <div class="cards" id="cards">
+        <div class="cd cd--back2"></div>
+        <div class="cd cd--back1"></div>
+        <div class="cd cd--front" id="cardA"></div>
+        <div class="cd cd--front" id="cardB"></div>
+        <div class="cd cd--front" id="cardC"></div>
+      </div>
+
+      <p class="intro" id="intro">
+        <span class="ln"><span class="ln-i">Good things take time, and we’re almost there!</span></span>
+        <span class="ln"><span class="ln-i">You’ll soon see exactly what we do &amp; how we do it.</span></span>
+        <span class="ln ln--ink"><span class="ln-i">Sign up to be the first to know when we go live.</span></span>
+      </p>
+
+      <!-- Mailchimp: audience "Rivka Thaler | Web Design", embedded form "Teller coming soon website" (id 1765).
+           Every sign-up is tagged "coming soon" (tag id 779). The address below is Mailchimp's public
+           sign-up address — it contains no password or key. Visitors never see a Mailchimp page. -->
+      <form class="signup" id="signup" novalidate
+            data-mailchimp="https://rivkathaler.us8.list-manage.com/subscribe/post?u=e5620913f93f43c0b4bf35968&amp;id=309cadfb5e&amp;f_id=0036c4e1f0"
+            data-mailchimp-tags="779" data-endpoint="">
+        <label class="sr" for="su-name">Name</label>
+        <input class="field" id="su-name" name="name" type="text" placeholder="Name" autocomplete="name">
+        <label class="sr" for="su-email">Email</label>
+        <input class="field" id="su-email" name="email" type="email" placeholder="Email" autocomplete="email" required>
+        <button class="btn" type="submit">Keep me posted</button>
+        <p class="status" id="su-status" role="status" aria-live="polite"></p>
+      </form>
+
+    </div>
+  </main>
+
+  <script src="assets/js/gsap.min.js"></script>
+  <script src="js/projects.js"></script>
+  <script src="js/fit.js"></script>
+  <script src="js/cards.js"></script>
+  <script src="js/trail.js"></script>
+  <script src="js/intro.js"></script>
+  <script src="js/signup.js"></script>
+</body>
+</html>

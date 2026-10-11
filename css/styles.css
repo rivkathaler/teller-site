@@ -1,0 +1,366 @@
+/* ------------------------------------------------------------------
+   TELLER — coming soon
+   Unit system: --px = ONE FIGMA PIXEL. Two artboards, picked by <html class="m"> (see index.html):
+     desktop 1440 × 1024   ·   phone ("m") 402 × 874 (iPhone 17)
+   Every size/position below is the number from the Figma file:  width: calc(98 * var(--px));
+   ------------------------------------------------------------------ */
+
+@font-face {
+  font-family: "Polin";
+  src: url("../assets/fonts/Polin-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: block;
+}
+@font-face {
+  font-family: "Polin";
+  src: url("../assets/fonts/Polin-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-display: block;
+}
+@font-face {
+  font-family: "Polin";
+  src: url("../assets/fonts/Polin-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-display: block;
+}
+
+:root {
+  --vh: 100vh;
+  --AW: 1440;                       /* artboard width / height in Figma pixels */
+  --AH: 1024;
+  --k: 1;                           /* size of the Part 1 pieces: 1 desktop, ½ phone */
+  --c: 98;                          /* circle diameter in Figma px */
+  /* ONE FIGMA PIXEL — fits the artboard inside the screen (width AND height),
+     so nothing is ever cut off on wide, tall, big or small screens. */
+  --px: min(calc(100vw / var(--AW)), calc(var(--vh) / var(--AH)));
+  /* spare room left/right and top/bottom once the artboard is fitted (a length) */
+  --mx: calc((100vw - var(--AW) * var(--px)) / 2);
+  --my: calc((var(--vh) - var(--AH) * var(--px)) / 2);
+
+  --cream: #fffaf3;
+  --lime: #dcff54;
+  --ink: #003637;
+  --white: #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+@supports (height: 100dvh) { :root { --vh: 100dvh; } }
+
+/* PHONE (portrait, taller than 7:10) — the iPhone 17 artboard from Figma */
+html.m { --AW: 402; --AH: 874; --k: 0.5; --c: 49; --ay: -0.5; }
+
+html, body {
+  height: 100%;
+  background: var(--cream);
+  overflow: hidden;
+}
+
+body {
+  font-family: "Polin", system-ui, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Full-screen stage; the artboard is centred in it and scales with width. */
+.stage {
+  position: fixed;
+  inset: 0;
+  height: var(--vh);
+  background: var(--cream);
+  overflow: hidden;
+}
+
+.frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--AW) * var(--px));
+  height: calc(var(--AH) * var(--px));
+  transform: translate(-50%, -50%);
+}
+
+/* Every animated piece reads its box from --x / --y / --w (Figma pixels). */
+.chip, .logo, .grid, .wordmark, .tagline {
+  position: absolute;
+  /* --ea / --eb / --er = 0…1: glide to the left / top / right edge of the SCREEN */
+  left: calc(var(--x, 0) * var(--px) - var(--mx) * var(--ea, 0) + var(--mx) * var(--er, 0));
+  top: calc(var(--y, 0) * var(--px) - var(--my) * var(--eb, 0));
+  will-change: transform, opacity;
+}
+
+/* ---- chips (pills that collapse into circles) --------------------- */
+.chip {
+  --w: var(--c);
+  width: calc(var(--w) * var(--px));
+  height: calc(var(--c) * var(--px));
+  border-radius: calc(var(--c) * var(--px));
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: transparent;
+}
+.chip--lime  { background: var(--lime); }
+.chip--white { background: var(--white); }
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: calc(2 * var(--k) * var(--px)) solid var(--lime);
+  pointer-events: none;
+}
+.chip--white .ring { opacity: 0; }
+
+.label {
+  position: absolute;
+  left: calc(50% + var(--dx, 0) * var(--px));
+  top: calc(50% + var(--dy, 0) * var(--px));
+  transform: translate(-50%, -50%);
+  font-size: calc(26 * var(--k) * var(--px));
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+/* arrow glyph: 38.64 × 29.69 incl. stroke overflow, centred in the circle */
+.arrow {
+  position: absolute;
+  left: calc(50% - 19.32 * var(--k) * var(--px) + var(--ax, 0) * var(--px));
+  top: calc(50% - 14.84 * var(--k) * var(--px) + var(--ay, -1) * var(--px));
+  width: calc(38.6413 * var(--k) * var(--px));
+  height: calc(29.6877 * var(--k) * var(--px));
+  pointer-events: none;
+  opacity: 0;
+}
+.chip--ring .arrow:not(.arrow--lime) { opacity: 1; }
+
+/* ---- logo + final lockup ------------------------------------------ */
+.logo {
+  z-index: 5;
+  width: calc(var(--w, var(--c)) * var(--px));
+  height: calc(var(--w, var(--c)) * var(--px));
+  display: block;
+}
+
+.grid {
+  --x: 510; --y: 402; --w: 271.17; --h: 187.71;
+  width: calc(var(--w) * var(--px));
+  height: calc(var(--h) * var(--px));
+  opacity: 0;
+}
+.wordmark {
+  --x: 529; --y: 478; --w: 190.65; --h: 68.5;
+  width: calc(var(--w) * var(--px));
+  height: calc(var(--h) * var(--px));
+  opacity: 0;
+}
+.wordmark--dark { --x: 529; --y: 478; }
+.tagline {
+  --x: 728.64; --y: 509.71; --w: 158.39; --h: 35.29;
+  width: calc(var(--w) * var(--px));
+  height: calc(var(--h) * var(--px));
+  opacity: 0;
+}
+
+/* faint lime boxes that follow the cursor (js/trail.js) — sits behind everything */
+.trail {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.trail-on .trail { opacity: 1; }
+
+/* ================= Part 2 · Coming soon ================= */
+.cards {
+  /* a deck of cards, centred on the GAP between "COMING" and "SOON" and on the capitals.
+     Everything is in em so the deck scales with the headline. */
+  position: absolute;
+  left: calc(var(--gx, 834px) - 0.883em);
+  top: calc(var(--cy, 492px) - 0.965em);
+  width: 1.766em;                 /* 345 Figma px at the 1440 artboard … */
+  height: 1.93em;                 /* … × 377 (the exact size of the cut pictures) */
+  font-size: var(--fs, calc(182 * var(--px)));
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+}
+.cd {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.195em;          /* ≈ the 37px corner already baked into the pictures */
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+.cd--back1 { background: var(--lime); }
+.cd--back2 { background: var(--ink); }
+.cd--front { overflow: visible; background: transparent; box-shadow: 0 0.09em 0.2em rgba(0, 54, 55, .16); }
+.cd--front .face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #ece7de;
+  border-radius: 0.195em;
+  clip-path: inset(0 round 0.195em);          /* reliable rounded clipping, even while the card is rotating */
+  isolation: isolate;
+}
+/* the picture is cut to the exact card size, so it simply fills the card (no blur, no cropping) */
+.cd .art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tag {
+  --u: calc(var(--fs, 182px) / 100);          /* 1% of the headline size */
+  position: absolute;
+  left: calc(var(--u) * 6);
+  bottom: calc(var(--u) * 6);
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 3.5);
+  height: calc(var(--u) * 15);
+  padding: 0 calc(var(--u) * 7) 0 calc(var(--u) * 2.5);
+  border-radius: 1000px;
+  background: rgba(255, 255, 255, .92);
+  font-size: calc(var(--u) * 6.8);
+  line-height: 1;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.tag i {
+  width: calc(var(--u) * 10);
+  height: calc(var(--u) * 10);
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: inset 0 0 0 calc(var(--u) * 0.5) rgba(0, 54, 55, .25);
+}
+.headline, .intro, .signup { position: absolute; }
+
+.headline {
+  left: calc(50% - 50vw);
+  top: var(--hy, calc(358 * var(--px)));
+  width: 100vw;
+  text-align: center;
+  font-weight: 500;
+  font-size: var(--fs, calc(182 * var(--px)));
+  line-height: normal;
+  word-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: pre;
+  color: #000;
+}
+.headline .ch {
+  display: inline-block;
+  white-space: pre;
+  clip-path: inset(-5% -12% -18% -12%);
+}
+.headline .hl { display: block; white-space: pre; }
+.headline .ci { display: inline-block; will-change: transform; }
+
+.intro {
+  left: calc(71 * var(--px) - var(--mx));
+  top: calc(890.8 * var(--px) + var(--my));     /* 3 lines × 22.4 (Polin line-height ≈ 1.4) → last line sits level with the button label */
+  width: calc(621 * var(--px));
+  font-size: calc(16 * var(--px));
+  line-height: normal;
+  color: #000;
+}
+.intro .ln { display: block; overflow: hidden; white-space: nowrap; }
+.intro .ln-i { display: inline-block; will-change: transform; }
+.intro .ln--ink { color: var(--ink); }
+
+.signup {
+  left: calc(1197 * var(--px) + var(--mx));
+  top: calc(845 * var(--px) + var(--my));
+  width: calc(184 * var(--px));
+}
+.field, .btn {
+  display: block;
+  width: 100%;
+  height: calc(37 * var(--px));
+  margin-bottom: calc(4 * var(--px));
+  border: calc(1 * var(--px)) solid var(--lime);
+  border-radius: calc(100 * var(--px));
+  font-family: inherit;
+  font-size: calc(16 * var(--px));
+  line-height: normal;
+  color: #000;
+  background: transparent;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.field { padding: 0 calc(19 * var(--px)); transition: border-color .25s, box-shadow .25s; }
+.field::placeholder { color: #d9d9d9; opacity: 1; }
+.field:focus { border-color: var(--ink); }
+.field.invalid { border-color: #e2554f; }
+.btn {
+  background: var(--lime);
+  cursor: pointer;
+  text-align: center;
+  transition: transform .25s, background-color .25s;
+}
+.btn:hover { transform: translateY(calc(-2 * var(--px))); }
+.btn:active { transform: translateY(0); }
+.btn[disabled] { opacity: .6; cursor: default; }
+.status {
+  margin-top: calc(6 * var(--px));
+  min-height: calc(18 * var(--px));
+  font-size: calc(13 * var(--px));
+  line-height: normal;
+  color: var(--ink);
+  text-align: center;
+}
+.status.error { color: #c0392b; }
+
+/* ================= PHONE layout (Figma "iPhone 17", 402 × 874) ================= */
+html.m .headline { left: var(--hx, calc(-19 * var(--px))); width: auto; text-align: left; }
+html.m .intro {
+  left: calc(25 * var(--px) - var(--mx));
+  top: calc(516 * var(--px));
+  width: calc(372 * var(--px));
+  font-size: calc(14 * var(--px));
+}
+html.m .signup {
+  left: calc(37 * var(--px));
+  top: calc(715 * var(--px) + var(--my));
+  width: calc(338 * var(--px));
+}
+html.m .field { padding: 0 calc(36 * var(--px)); }
+html.m .field[name="name"] { padding-bottom: calc(2 * var(--px)); }        /* Figma sets the "Name" text 1px higher than "Email" */
+html.m .btn { padding: 0 calc(10 * var(--px)) calc(2 * var(--px)) 0; }    /* Figma centres the label on the screen (5px left of the button's centre) */
+html.m .status { font-size: calc(12 * var(--px)); }
+html.m .cards {                       /* two cards only: the top one + the next one tilted behind it */
+  left: calc(239 * var(--px) + var(--mx));
+  top: calc(315 * var(--px));
+  width: calc(168 * var(--px));
+  height: calc(183.583 * var(--px));
+  font-size: calc(101 * var(--px));
+}
+html.m .cd { border-radius: calc(19.478 * var(--px)); }
+html.m .cd--front { box-shadow: none; }
+html.m .cd--front .face { border-radius: calc(19.478 * var(--px)); clip-path: inset(0 round calc(19.478 * var(--px))); }
+html.m .cd--back1, html.m .cd--back2 { display: none; }
+html.m .tag { --u: calc(var(--px) * 1.45); }
+html.m .btn:hover { transform: none; }
+
+.sr {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+img { display: block; max-width: none; user-select: none; -webkit-user-drag: none; }
+
+/* Hidden until fonts + timeline are ready (no flash of unstyled pieces). */
+.js .frame { visibility: hidden; }
+.js.ready .frame { visibility: visible; }
+
+/* No-JS safety net: show the final lockup. */
+html:not(.js) .wordmark, html:not(.js) .tagline { opacity: 1; }
+html:not(.js) .chip, html:not(.js) .logo, html:not(.js) .grid { display: none; }
+html:not(.js) .headline::before { content: "COMING  SOON"; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chip, .logo { display: none; }
+}
