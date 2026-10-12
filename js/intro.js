@@ -27,7 +27,7 @@
   var labelB = $("labelB"), labelC = $("labelC");
   var ringC = C.querySelector(".ring");
   var grid = $("grid"), wordmark = $("wordmark"), wordmarkDark = $("wordmarkDark"), tagline = $("tagline");
-  var headline = $("headline"), intro = $("intro"), signup = $("signup");
+  var headline = $("headline"), intro = $("intro"), signup = $("signup"), phone = $("phone");
 
   var M = root.classList.contains("m");            // phone layout?
 
@@ -100,6 +100,7 @@
     gsap.set(wordmark, { clipPath: "inset(0% 100% 0% 0%)", opacity: 0 });
     gsap.set(tagline, { y: 14, opacity: 0 });
     gsap.set(wordmarkDark, { opacity: 0 });
+    gsap.set(phone, { opacity: 0, y: -10 });
     gsap.set(letters, { yPercent: 125 });
     gsap.set(introLines, { yPercent: 115 });
     gsap.set(signupBits, { y: 18, opacity: 0 });
@@ -173,6 +174,7 @@
     .set(D, { "--x": L.Dpop[0], "--y": L.Dpop[1], "--w": L.Dpop[2], scale: 0, opacity: 1, "--er": 0 }, "to2+=0.5")
     .to(D, { scale: 1, duration: 0.3, ease: "back.out(2)" }, "to2+=0.5")
     .to(D, { "--x": L.Dcorner[0], "--y": L.Dcorner[1], "--ea": 1, "--eb": 1, duration: 0.7, ease: "expo.inOut" }, "to2+=0.8")
+    .to(phone, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, "to2+=1.3")
     .to(letters, { yPercent: 0, duration: 0.8, ease: "power4.out", stagger: 0.035 }, "to2+=0.45")
     .to(introLines, { yPercent: 0, duration: 0.6, ease: "power3.out", stagger: 0.08 }, "to2+=1.0")
     .to(signupBits, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out", stagger: 0.06 }, "to2+=1.1");

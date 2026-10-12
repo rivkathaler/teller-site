@@ -176,6 +176,32 @@ body {
 }
 .trail-on .trail { opacity: 1; }
 
+/* ---- phone number bubble (aligned with the logo row) ---------------- */
+.phone {
+  position: absolute;
+  right: calc(59 * var(--px) - var(--mx));          /* same right edge as the sign-up form */
+  top: calc(43 * var(--px) - var(--my));            /* same top as the corner logo */
+  z-index: 6;
+  height: calc(37 * var(--px));
+  padding: 0 calc(20 * var(--px));
+  display: inline-flex;
+  align-items: center;
+  border-radius: calc(100 * var(--px));
+  border: calc(1 * var(--px)) solid var(--lime);
+  background: var(--lime);
+  color: var(--ink);
+  font-size: calc(16 * var(--px));
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  opacity: 0;
+  transition: background-color .25s, color .25s, border-color .25s;
+}
+.phone::after { content: ""; position: absolute; inset: -8px; }       /* bigger tap area for thumbs */
+.phone:hover, .phone:focus-visible { background: var(--ink); border-color: var(--ink); color: var(--cream); }
+.phone:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+html:not(.js) .phone { opacity: 1; }
+
 /* ================= Part 2 · Coming soon ================= */
 .cards {
   /* a deck of cards, centred on the GAP between "COMING" and "SOON" and on the capitals.
@@ -344,6 +370,14 @@ html.m .cd--front .face { border-radius: calc(19.478 * var(--px)); clip-path: in
 html.m .cd--back1, html.m .cd--back2 { display: none; }
 html.m .tag { --u: calc(var(--px) * 1.45); }
 html.m .btn:hover { transform: none; }
+html.m .phone {                                       /* sits in the gap between the corner logo and the wordmark */
+  right: auto;
+  left: calc(91 * var(--px));
+  top: calc(32.5 * var(--px) - var(--my));
+  height: calc(30 * var(--px));
+  padding: 0 calc(14 * var(--px));
+  font-size: calc(13 * var(--px));
+}
 
 .sr {
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
